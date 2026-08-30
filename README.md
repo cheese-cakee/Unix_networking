@@ -2,7 +2,7 @@
 
 This repository contains small Unix networking programs that I wrote while studying [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/). The core TCP, UDP, `select()`, and `poll()` examples are based on the guide, with small changes and experiments added as I worked through them. One example is the nickname support in the `select()` chat server.
 
-I have kept the repository public as a practical reference for anyone beginning with socket programming in C. Each program is intentionally small, so it is possible to follow the complete flow from creating a socket to exchanging data without first understanding a large framework.
+I have kept the repository public as a practical reference for anyone beginning with socket programming in C.
 
 ## Programs
 
@@ -33,7 +33,7 @@ The programs were written and tested on Linux and WSL. You will need:
 
 - GCC, Clang, or another C compiler;
 - standard POSIX networking headers;
-- Netcat (`nc`) if you want to connect to the chat servers from multiple terminals.
+- Telnet / Netcat if you want to make the chat servers talk!;
 
 On Ubuntu or Debian:
 
@@ -128,20 +128,3 @@ Wait for input or a 2.5 second timeout:
 ```bash
 ./build/poll-example
 ```
-
-## Suggested learning order
-
-If you are new to network programming, a useful order is:
-
-1. `misc/findip.c`
-2. the TCP client and server
-3. the UDP client and server
-4. `misc/pollexample.c`
-5. the `poll()` chat server
-6. the `select()` chat server
-
-This moves from address resolution and basic communication to managing several clients in one event loop.
-
-## Scope and limitations
-
-These programs are for learning and experimentation. They do not yet implement message framing, complete partial-write handling, authentication, resource limits, or graceful shutdown. Those concerns are important in a production network service, but leaving them outside these examples keeps the basic socket behavior easier to study.
