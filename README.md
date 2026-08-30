@@ -114,17 +114,3 @@ Messages from one client are forwarded to the others. The `select()` version als
 ```text
 /nick cheesecake
 ```
-
-### Smaller utilities
-
-Resolve a hostname:
-
-```bash
-./build/findip example.com
-```
-
-Wait for input or a 2.5 second timeout:
-
-```bash
-./build/poll-example
-```
