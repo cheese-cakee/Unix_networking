@@ -1,39 +1,39 @@
 # Unix Networking in C
 
-A hands-on collection of small C programs for learning Unix network programming from the socket API upward.
+This repository contains small Unix networking programs that I wrote while studying [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/). The core TCP, UDP, `select()`, and `poll()` examples are based on the guide, with small changes and experiments added as I worked through them. One example is the nickname support in the `select()` chat server.
 
-This repository follows my progression from resolving a hostname and sending a single packet to serving multiple connected clients with `select()` and `poll()`. The programs are deliberately small enough to read in one sitting, experiment with, and debug using ordinary Linux tools.
+I have kept the repository public as a practical reference for anyone beginning with socket programming in C. Each program is intentionally small, so it is possible to follow the complete flow from creating a socket to exchanging data without first understanding a large framework.
 
-## What is included
+## Programs
 
-| Area | Program | What it demonstrates |
+| Directory | Program | Description |
 | --- | --- | --- |
-| TCP | `TCP/server.c` | A concurrent IPv4 server that accepts connections, forks a child, and sends a greeting |
-| TCP | `TCP/client.c` | Hostname resolution, connection attempts across returned addresses, and receiving data |
-| UDP | `UDP/datagramserver.c` | Binding an IPv6 datagram socket and receiving a packet with `recvfrom()` |
-| UDP | `UDP/datagramclient.c` | Resolving a host and sending a connectionless packet with `sendto()` |
-| Multi-client I/O | `Multichat Server/multichatserver.c` | A `poll()`-based chat relay with a dynamically growing descriptor array |
-| Multi-client I/O | `Multichat Server/selectmserver.c` | A `select()`-based chat server with broadcasting and `/nick` support |
-| Utilities | `misc/findip.c` | Printing the IPv4 and IPv6 addresses returned by `getaddrinfo()` |
-| Utilities | `misc/pollexample.c` | Waiting for standard input with `poll()` and a timeout |
+| `TCP` | `server.c` | Listens on port `3490`, accepts TCP connections, forks a child process, and sends a greeting |
+| `TCP` | `client.c` | Resolves a hostname, connects to the server, and prints the received message |
+| `UDP` | `datagramserver.c` | Binds an IPv6 datagram socket on port `4950` and receives one packet |
+| `UDP` | `datagramclient.c` | Resolves a host and sends a message using `sendto()` |
+| `Multichat Server` | `multichatserver.c` | Uses `poll()` to relay messages between multiple connected clients |
+| `Multichat Server` | `selectmserver.c` | Uses `select()` for multi-client chat and supports `/nick <name>` |
+| `misc` | `findip.c` | Prints the IPv4 and IPv6 addresses returned by `getaddrinfo()` |
+| `misc` | `pollexample.c` | Demonstrates waiting for standard input with `poll()` and a timeout |
 
-## Concepts covered
+## What this repository covers
 
-- the `socket()` → `bind()` → `listen()` → `accept()` lifecycle;
-- client connections with `connect()`;
-- TCP streams versus UDP datagrams;
-- IPv4 and IPv6 address handling;
-- hostname resolution with `getaddrinfo()`;
-- converting binary addresses with `inet_ntop()`;
-- process-per-connection concurrency with `fork()`;
-- I/O multiplexing with `select()` and `poll()`;
-- tracking, accepting, and broadcasting between multiple clients.
+- resolving hostnames with `getaddrinfo()`;
+- creating TCP and UDP sockets;
+- binding, listening, accepting, connecting, sending, and receiving;
+- working with IPv4 and IPv6 addresses;
+- handling concurrent TCP connections with `fork()`;
+- monitoring multiple file descriptors with `select()` and `poll()`;
+- broadcasting messages between connected clients.
 
 ## Requirements
 
-- Linux, WSL, or another POSIX-like environment;
-- a C compiler such as GCC or Clang;
-- optionally, Netcat (`nc`) for connecting to the chat servers.
+The programs were written and tested on Linux and WSL. You will need:
+
+- GCC, Clang, or another C compiler;
+- standard POSIX networking headers;
+- Netcat (`nc`) if you want to connect to the chat servers from multiple terminals.
 
 On Ubuntu or Debian:
 
@@ -43,7 +43,7 @@ sudo apt install build-essential netcat-openbsd
 
 ## Build
 
-From the repository root:
+Run the following commands from the repository root:
 
 ```bash
 mkdir -p build
@@ -61,27 +61,27 @@ cc -Wall -Wextra misc/findip.c -o build/findip
 cc -Wall -Wextra misc/pollexample.c -o build/poll-example
 ```
 
-## Try the examples
+## Running the examples
 
-### TCP greeting server
+### TCP client and server
 
-Start the server, which listens on port `3490`:
+Start the server:
 
 ```bash
 ./build/tcp-server
 ```
 
-In another terminal, connect the client:
+Connect from another terminal:
 
 ```bash
 ./build/tcp-client localhost
 ```
 
-The server forks a child for the connection and the client receives `Hello, world!`.
+The client should receive `Hello, world!` and then exit.
 
-### UDP datagram
+### UDP client and server
 
-Start the IPv6 UDP listener on port `4950`:
+Start the UDP listener:
 
 ```bash
 ./build/udp-server
@@ -93,11 +93,9 @@ Send it a message from another terminal:
 ./build/udp-client ::1 "hello over UDP"
 ```
 
-Unlike TCP, no persistent connection is established: the client sends one datagram and exits.
-
 ### Multi-client chat
 
-Choose either implementation; both listen on port `9034`, so run only one at a time:
+Run either the `poll()` or `select()` implementation. Both use port `9034`, so they cannot run at the same time.
 
 ```bash
 ./build/chat-poll
@@ -111,41 +109,39 @@ Connect from two or more terminals:
 nc localhost 9034
 ```
 
-Messages are broadcast to the other connected clients. The `select()` implementation also supports changing the generated nickname:
+Messages from one client are forwarded to the others. The `select()` version also accepts:
 
 ```text
 /nick cheesecake
 ```
 
-### Resolve a hostname
+### Smaller utilities
+
+Resolve a hostname:
 
 ```bash
 ./build/findip example.com
 ```
 
-### Minimal `poll()` demonstration
+Wait for input or a 2.5 second timeout:
 
 ```bash
 ./build/poll-example
 ```
 
-Press Enter to trigger the readable event, or wait 2.5 seconds to observe the timeout.
+## Suggested learning order
 
-## Suggested reading order
+If you are new to network programming, a useful order is:
 
 1. `misc/findip.c`
-2. `TCP/server.c` and `TCP/client.c`
-3. `UDP/datagramserver.c` and `UDP/datagramclient.c`
+2. the TCP client and server
+3. the UDP client and server
 4. `misc/pollexample.c`
-5. `Multichat Server/multichatserver.c`
-6. `Multichat Server/selectmserver.c`
+5. the `poll()` chat server
+6. the `select()` chat server
 
-That order moves from address resolution and basic socket communication to managing many connections in a single event loop.
+This moves from address resolution and basic communication to managing several clients in one event loop.
 
-## Scope
+## Scope and limitations
 
-These are educational programs, not production-ready servers. They intentionally leave room for later exercises such as message framing, non-blocking sockets, partial-write handling, authentication, resource limits, graceful shutdown, and stronger input validation.
-
-## Acknowledgements
-
-The early socket examples and several conventions in this repository follow the excellent [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/), a practical introduction to sockets in C.
+These programs are for learning and experimentation. They do not yet implement message framing, complete partial-write handling, authentication, resource limits, or graceful shutdown. Those concerns are important in a production network service, but leaving them outside these examples keeps the basic socket behavior easier to study.
