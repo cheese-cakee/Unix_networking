@@ -79,6 +79,8 @@ Connect from another terminal:
 
 The client should receive `Hello, world!` and then exit.
 
+![TCP server accepting a localhost connection and the client receiving a response](docs/images/tcp-client-server.png)
+
 ### UDP client and server
 
 Start the UDP listener:
@@ -114,6 +116,8 @@ Messages from one client are forwarded to the others. The `select()` version als
 ```text
 /nick cheesecake
 ```
+
+![Select-based chat server with three connected clients, message broadcasting, and nickname support](docs/images/select-chat-demo.png)
 
 ### Smaller utilities
 
