@@ -1,10 +1,10 @@
 # Unix Networking in C
 
-A completed collection of POSIX networking examples written while working through [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/). The programs stay close to the guide while adding a few experiments, including nickname support in the `select()` chat server.
+A completed collection of POSIX networking examples written while working through [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/). The programs stay close to the guide while adding a few changes here and there.
 
-The repository is a compact reference for learning socket programming in C on Linux or WSL.
+you can use this repository is a compact reference for learning socket programming in C on Linux or WSL.
 
-## Architecture
+## Repo Architecture
 
 ```text
 .
@@ -26,11 +26,9 @@ The repository is a compact reference for learning socket programming in C on Li
 `-- docs/images/                 # Example screenshots
 ```
 
-Together, the examples cover name resolution, TCP and UDP, IPv4 and IPv6, client/server communication, `fork()`, `select()`, `poll()`, UDP broadcasting, partial sends, and basic data serialization.
-
 ## Build
 
-You need a C compiler and standard POSIX networking headers. Netcat is useful for the chat examples.
+You need a C compiler and standard POSIX networking headers. Netcat/Telnet is required for the chat examples.
 
 ```bash
 sudo apt install build-essential netcat-openbsd
@@ -48,8 +46,6 @@ cc -Wall -Wextra misc/pollexample.c -o build/poll-example
 cc -Wall -Wextra misc/floatdoubleieee.c -o build/float-double-ieee
 cc -Wall -Wextra -c misc/partial_send_handling.c -o build/partial-send-handling.o
 ```
-
-`partial_send_handling.c` is a helper without a `main()` function, so it is compiled as an object file.
 
 ## Run
 
@@ -103,5 +99,3 @@ Both servers use port `9034`. The `select()` version also supports `/nick <name>
 ./build/poll-example
 ./build/float-double-ieee
 ```
-
-The floating-point example demonstrates ordinary finite values; it does not implement every IEEE-754 special case.
