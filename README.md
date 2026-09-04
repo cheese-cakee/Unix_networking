@@ -2,7 +2,7 @@
 
 A completed collection of POSIX networking examples written while working through [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/). The programs stay close to the guide while adding a few changes here and there.
 
-you can use this repository is a compact reference for learning socket programming in C on Linux or WSL.
+you can use this repository as a compact reference for learning socket programming in C on Linux or WSL.
 
 ## Repo Architecture
 
