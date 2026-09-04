@@ -18,5 +18,5 @@ int sendall(int s, char *buf, int *len)
 
 	*len = total; //returning number actually sent
 		      
-	return n==-1?-1:0 //-1 if fail, 0 if success
+	return n==-1?-1:0; //-1 if fail, 0 if success
 } 
