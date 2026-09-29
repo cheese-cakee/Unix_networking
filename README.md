@@ -1,6 +1,6 @@
 # Unix Networking in C
 
-A completed collection of POSIX networking programs I wrote following [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/).
+A collection of POSIX networking programs I wrote following [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/).
 
 ## Repo Architecture
 
